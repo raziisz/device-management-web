@@ -1,6 +1,13 @@
-<nav>
-  <button mat-button routerLink="/categories">Categorias</button>
-  <button mat-button routerLink="/other-page" disabled>Outra Página</button>
+<nav class="dark-nav">
+  <div class="nav-content">
+    <span class="logo">Gerenciamento de Dispositivos</span>
+    <div class="nav-links">
+      <a mat-button routerLink="/home" routerLinkActive="active-link">Home</a>
+      <a mat-button routerLink="/categories" routerLinkActive="active-link"
+        >Categorias</a
+      >
+    </div>
+  </div>
 </nav>
 
 <router-outlet></router-outlet>
