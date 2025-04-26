@@ -23,6 +23,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ToastService } from '../../services/toast.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-category-table',
@@ -38,6 +40,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    RouterModule,
+    MatIconModule,
   ],
   templateUrl: './category-table.component.html',
   styleUrl: './category-table.component.css',

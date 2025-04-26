@@ -1,72 +1,91 @@
 <div class="loading-overlay" *ngIf="isLoading">
   <mat-spinner diameter="50"></mat-spinner>
 </div>
-<article class="table-header">
+<div class="header-section">
+  <h2 class="section-title">Gerenciamento de Categorias</h2>
   <button
-    class="button-add-row"
-    mat-button
+    class="primary-button"
+    mat-raised-button
     (click)="addRow()"
     [disabled]="isLoading"
   >
-    Adicionar
+    <mat-icon>add</mat-icon>
+    Adicionar Nova
   </button>
-</article>
-<table mat-table [dataSource]="dataSource">
-  <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
-    <th mat-header-cell *matHeaderCellDef>
-      {{ col.label }}
-    </th>
-    <td mat-cell *matCellDef="let element">
-      <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
-        <div class="btn-edit" *ngSwitchCase="'isEdit'">
-          <button
-            mat-button
-            class="button-remove-rows"
-            (click)="deleteCategory(element.id)"
-          >
-            Remover
-          </button>
-        </div>
-        <span *ngSwitchDefault>
-          {{ element[col.key] }}
-        </span>
-      </div>
-      <div [ngSwitch]="col.type" *ngIf="element.isEdit">
-        <div class="btn-edit" *ngSwitchCase="'isEdit'">
-          <button
-            mat-button
-            (click)="insertCategory(element)"
-            [disabled]="isFormInvalid(element)"
-          >
-            Concluir
-          </button>
-        </div>
-        <mat-form-field *ngSwitchDefault>
-          <input
-            matInput
-            [name]="col.key"
-            [(ngModel)]="element[col.key]"
-            #fieldModel="ngModel"
-            [required]="col['required']!"
-            [type]="col.type"
-            [readonly]="col.key !== 'name'"
-          />
-          <mat-error
-            *ngIf="
-              fieldModel.invalid && (fieldModel.dirty || fieldModel.touched)
-            "
-          >
-            <span *ngIf="fieldModel.errors?.['required']"
-              >Este campo é obrigatório.</span
+</div>
+<div class="table-wrapper">
+  <table mat-table [dataSource]="dataSource">
+    <!-- Colunas -->
+    <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+      <th mat-header-cell *matHeaderCellDef class="header-cell">
+        {{ col.label }}
+      </th>
+      <td mat-cell *matCellDef="let element" class="data-cell">
+        <!-- Conteúdo das células -->
+        <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+          <div class="action-buttons" *ngSwitchCase="'isEdit'">
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteCategory(element.id)"
+              matTooltip="Excluir categoria"
             >
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <span *ngSwitchDefault class="cell-content">
+            {{ element[col.key] }}
+          </span>
+        </div>
+
+        <!-- Modo edição -->
+        <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+          <div class="action-buttons" *ngSwitchCase="'isEdit'">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="insertCategory(element)"
+              [disabled]="isFormInvalid(element)"
+              matTooltip="Salvar alterações"
+            >
+              <mat-icon>check</mat-icon>
+            </button>
+          </div>
+          <mat-form-field *ngSwitchDefault class="edit-field">
+            <input
+              matInput
+              [(ngModel)]="element[col.key]"
+              #fieldModel="ngModel"
+              [required]="col['required']!"
+              [type]="col.type"
+              [readonly]="col.key !== 'name'"
+            />
+            <mat-error
+              *ngIf="
+                fieldModel.invalid && (fieldModel.dirty || fieldModel.touched)
+              "
+            >
+              <span *ngIf="fieldModel.errors?.['required']">
+                Campo obrigatório
+              </span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns"
+      class="header-row"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="data-row"
+    ></tr>
+  </table>
+</div>
 
 <mat-paginator
   [length]="meta.total"
