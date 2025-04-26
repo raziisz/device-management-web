@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Category, CategoryColumns } from '../../models/category.model';
+import {
+  Category,
+  CategoryColumns,
+  ColumnSchema,
+} from '../../models/category.model';
 import { CategoryService } from '../../services/category.service';
 import { CommonModule } from '@angular/common';
 import { PaginationMeta } from '../../models/pagination.model';
@@ -16,9 +20,13 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ToastService } from '../../services/toast.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-category-table',
+  standalone: true,
   imports: [
     CommonModule,
     MatFormFieldModule,
@@ -28,6 +36,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatNativeDateModule,
     MatTableModule,
     MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
   ],
   templateUrl: './category-table.component.html',
   styleUrl: './category-table.component.css',
@@ -35,51 +45,61 @@ import { MatDialog } from '@angular/material/dialog';
 export class CategoryTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  valid: any = {};
   displayedColumns: string[] = CategoryColumns.map((col) => col.key);
   dataSource = new MatTableDataSource<Category>();
-  columnsSchema: any = CategoryColumns;
+  columnsSchema: ColumnSchema[] = CategoryColumns;
   meta: PaginationMeta = {
     currentPage: 1,
     perPage: 15,
     lastPage: 0,
     total: 0,
   };
-
+  isLoading: boolean = false;
   constructor(
     private categoryService: CategoryService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
     this.loadCategories(this.meta.currentPage);
   }
 
-  // ngAfterViewInit(): void {
-  //   this.dataSource.paginator = this.paginator;
-  // }
-
   addRow() {
     const newRow: Category = {
-      id: 0,
+      id: Date.now(),
       name: '',
       createdAt: Intl.DateTimeFormat('pt-BR').format(new Date()),
       isEdit: true,
+    };
+    this.valid[newRow.id] = {
+      name: false,
     };
     this.dataSource.data = [newRow, ...this.dataSource.data];
   }
 
   insertCategory(row: Category): void {
-    if (row.id === 0) {
-      this.categoryService.addCategory(row).subscribe(() => {
-        this.loadCategories();
+    if (row.id) {
+      this.isLoading = true;
+      this.categoryService.addCategory(row).subscribe({
+        next: () => {
+          this.toastService.showSuccess('Categoria adicionada com sucesso!');
+          this.loadCategories(this.meta.currentPage);
+        },
+        error: (err) => {
+          console.error('Erro ao adicionar categoria:', err);
+          this.toastService.showError('Erro ao adicionar categoria');
+          this.isLoading = false;
+        },
       });
     }
   }
 
   loadCategories(page: number = 1): void {
-    this.categoryService
-      .getCategories(page, this.meta.perPage)
-      .subscribe((response) => {
+    this.isLoading = true;
+    this.categoryService.getCategories(page, this.meta.perPage).subscribe({
+      next: (response) => {
         this.dataSource.data = response.data.map((category) => ({
           ...category,
           createdAt: category.createdAt
@@ -88,7 +108,19 @@ export class CategoryTableComponent implements OnInit {
           isEdit: false,
         }));
         this.meta = response.meta;
-      });
+        this.isLoading = false;
+        if (this.meta.currentPage > this.meta.lastPage) {
+          this.loadCategories();
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.toastService.showError(
+          'Ocorreu um problema ao carregar categorias, tenta novamente mais tarde.'
+        );
+        console.error('Erro ao carregar categorias:', error);
+      },
+    });
   }
 
   deleteCategory(id: number): void {
@@ -97,19 +129,37 @@ export class CategoryTableComponent implements OnInit {
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.categoryService.deleteCategory(id).subscribe(() => {
-            this.dataSource.data = this.dataSource.data.filter(
-              (category) => category.id !== id
-            );
+          this.isLoading = true;
+          this.categoryService.deleteCategory(id).subscribe({
+            next: () => {
+              this.toastService.showSuccess('Categoria excluída com sucesso!');
+              this.loadCategories(this.meta.currentPage);
+            },
+            error: (err) => {
+              console.error('Erro ao excluir categoria:', err);
+              this.toastService.showError('Erro ao excluir categoria');
+              this.isLoading = false;
+            },
           });
         }
       });
   }
 
-  // onPageChange(event: PageEvent): void {
-  //   const newPage = event.pageIndex + 1;
-  //   const newPerPage = event.pageSize;
-  //   this.meta.perPage = newPerPage;
-  //   this.loadCategories(newPage);
-  // }
+  onPageChange(event: PageEvent): void {
+    this.meta.currentPage =
+      event.pageSize !== this.meta.perPage ? 1 : event.pageIndex + 1;
+
+    this.meta.perPage = event.pageSize;
+    this.loadCategories(this.meta.currentPage);
+  }
+
+  isFormInvalid(element: any): boolean {
+    return this.columnsSchema.some((col: ColumnSchema) => {
+      if (col.required) {
+        const fieldValue = element[col.key];
+        return !fieldValue || fieldValue.trim() === '';
+      }
+      return false;
+    });
+  }
 }
