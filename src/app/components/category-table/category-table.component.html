@@ -1,0 +1,79 @@
+<div class="loading-overlay" *ngIf="isLoading">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
+<article class="table-header">
+  <button
+    class="button-add-row"
+    mat-button
+    (click)="addRow()"
+    [disabled]="isLoading"
+  >
+    Adicionar
+  </button>
+</article>
+<table mat-table [dataSource]="dataSource">
+  <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+    <th mat-header-cell *matHeaderCellDef>
+      {{ col.label }}
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+        <div class="btn-edit" *ngSwitchCase="'isEdit'">
+          <button
+            mat-button
+            class="button-remove-rows"
+            (click)="deleteCategory(element.id)"
+          >
+            Remover
+          </button>
+        </div>
+        <span *ngSwitchDefault>
+          {{ element[col.key] }}
+        </span>
+      </div>
+      <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+        <div class="btn-edit" *ngSwitchCase="'isEdit'">
+          <button
+            mat-button
+            (click)="insertCategory(element)"
+            [disabled]="isFormInvalid(element)"
+          >
+            Concluir
+          </button>
+        </div>
+        <mat-form-field *ngSwitchDefault>
+          <input
+            matInput
+            [name]="col.key"
+            [(ngModel)]="element[col.key]"
+            #fieldModel="ngModel"
+            [required]="col['required']!"
+            [type]="col.type"
+            [readonly]="col.key !== 'name'"
+          />
+          <mat-error
+            *ngIf="
+              fieldModel.invalid && (fieldModel.dirty || fieldModel.touched)
+            "
+          >
+            <span *ngIf="fieldModel.errors?.['required']"
+              >Este campo é obrigatório.</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<mat-paginator
+  [length]="meta.total"
+  [pageSize]="meta.perPage"
+  [pageIndex]="meta.currentPage - 1"
+  [pageSizeOptions]="[5, 10, 15, 20]"
+  (page)="onPageChange($event)"
+  [disabled]="isLoading"
+>
+</mat-paginator>
