@@ -1,4 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+p {
+  font-family: Lato;
+}
+table {
+  width: 90%;
+  margin: auto;
+  margin-top: 25px;
+}
+.btn-edit {
+  text-align: right;
+}
+h2 {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.table-header {
+  width: 90%;
+  margin: auto;
+  text-align: right;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button-add-row {
+  background: #1b9e1b;
+  color: #ffffff;
+}
+
+.button-remove-rows {
+  background: red;
+  color: #ffffff;
+  margin-right: 5px;
+}
+
+.button-remove {
+  color: red;
+}
+
+::ng-deep .mat-form-field-infix {
+  width: 100% !important;
+}
+
+.form-input {
+  padding-right: 5px;
+}
+
+/* Adicione ao seu arquivo styles.css */
+.mat-mdc-snack-bar-container.success-toast {
+  --mdc-snackbar-container-color: #4caf50 !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+  border-radius: 8px !important;
+  margin-top: 70px !important;
+}
+
+/* Para toasts de erro */
+.mat-mdc-snack-bar-container.error-toast {
+  --mdc-snackbar-container-color: #f44336 !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+}
