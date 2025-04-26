@@ -1,0 +1,53 @@
+<article class="table-header">
+  <button class="button-add-row" mat-button (click)="addRow()">
+    Adicionar
+  </button>
+</article>
+<table mat-table [dataSource]="dataSource">
+  <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+    <th mat-header-cell *matHeaderCellDef>
+      {{ col.label }}
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+        <div class="btn-edit" *ngSwitchCase="'isEdit'">
+          <button
+            mat-button
+            class="button-remove"
+            (click)="deleteCategory(element.id)"
+          >
+            Remover
+          </button>
+        </div>
+        <span *ngSwitchDefault>
+          {{ element[col.key] }}
+        </span>
+      </div>
+      <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+        <div class="btn-edit" *ngSwitchCase="'isEdit'">
+          <button mat-button (click)="insertCategory(element)">Concluir</button>
+        </div>
+        <mat-form-field *ngSwitchDefault>
+          <input
+            required
+            [type]="col.type"
+            matInput
+            [(ngModel)]="element[col.key]"
+            [readonly]="col.key !== 'name'"
+          />
+        </mat-form-field>
+      </div>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<!-- <mat-paginator
+  [length]="meta.total"
+  [pageSize]="meta.perPage"
+  [pageIndex]="meta.currentPage - 1"
+  [pageSizeOptions]="[5, 10, 15, 20]"
+  (page)="onPageChange($event)"
+>
+</mat-paginator> -->
