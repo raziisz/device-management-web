@@ -1,0 +1,143 @@
+<div class="loading-overlay" *ngIf="isLoading">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
+<div class="header-section">
+  <h2 class="section-title">Dispositivos</h2>
+  <button
+    class="primary-button"
+    mat-raised-button
+    (click)="addRow()"
+    [disabled]="isLoading"
+  >
+    <mat-icon>add</mat-icon>
+    Adicionar Novo
+  </button>
+</div>
+<div class="table-wrapper">
+  <table mat-table [dataSource]="dataSource">
+    <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+      <th mat-header-cell *matHeaderCellDef class="header-cell">
+        {{ col.label }}
+      </th>
+      <td mat-cell *matCellDef="let element" class="data-cell">
+        <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+          <div class="action-buttons" *ngSwitchCase="'isEdit'">
+            <button
+              class="delete-button"
+              mat-icon-button
+              color="warn"
+              (click)="deleteDevice(element.id)"
+              matTooltip="Excluir dispositivo"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <span *ngSwitchCase="'select'" class="cell-content">
+            {{ element[col.key]["name"] }}
+          </span>
+          <span
+            *ngSwitchDefault
+            class="cell-content"
+            [matTooltip]="element[col.key]"
+          >
+            {{ element[col.key] }}
+          </span>
+        </div>
+
+        <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+          <div class="action-buttons" *ngSwitchCase="'isEdit'">
+            <button
+              class="delete-button"
+              mat-icon-button
+              color="warn"
+              (click)="removeRow(element)"
+              matTooltip="Remover linha"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="primary"
+              class="save-button"
+              (click)="insertDevice(element)"
+              [disabled]="isFormInvalid(element)"
+              matTooltip="Salvar alterações"
+              matTooltipPosition="above"
+            >
+              <mat-icon>check</mat-icon>
+            </button>
+          </div>
+          <mat-form-field *ngSwitchCase="'select'" class="edit-field">
+            <mat-select
+              [(ngModel)]="element[col.key]"
+              #fieldModel="ngModel"
+              [required]="col['required']!"
+              [name]="col.key"
+              placeholder="Selecione uma categoria"
+            >
+              <mat-option value="">Nenhuma categoria selecionada</mat-option>
+              <mat-option
+                *ngFor="let category of categories"
+                [value]="category"
+              >
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                fieldModel.invalid && (fieldModel.dirty || fieldModel.touched)
+              "
+            >
+              <span *ngIf="fieldModel.errors?.['required']">
+                Campo obrigatório
+              </span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field *ngSwitchDefault class="edit-field">
+            <input
+              matInput
+              [(ngModel)]="element[col.key]"
+              #fieldModel="ngModel"
+              [required]="col['required']!"
+              [type]="col.type"
+              [readonly]="col.key === 'id'"
+              [hidden]="col.key === 'id'"
+              [disabled]="col.key === 'id'"
+              (keydown)="validateInput($event, col.key)"
+            />
+            <mat-error
+              *ngIf="
+                fieldModel.invalid && (fieldModel.dirty || fieldModel.touched)
+              "
+            >
+              <span *ngIf="fieldModel.errors?.['required']">
+                Campo obrigatório
+              </span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns"
+      class="header-row"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="data-row"
+    ></tr>
+  </table>
+</div>
+
+<mat-paginator
+  [length]="meta.total"
+  [pageSize]="meta.perPage"
+  [pageIndex]="meta.currentPage - 1"
+  [pageSizeOptions]="[5, 10, 15, 20]"
+  (page)="onPageChange($event)"
+  [disabled]="isLoading"
+>
+</mat-paginator>
