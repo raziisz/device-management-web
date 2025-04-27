@@ -2,7 +2,7 @@
   <mat-spinner diameter="50"></mat-spinner>
 </div>
 <div class="header-section">
-  <h2 class="section-title">Categorias</h2>
+  <h2 class="section-title">Dispositivos</h2>
   <button
     class="primary-button"
     mat-raised-button
@@ -10,7 +10,7 @@
     [disabled]="isLoading"
   >
     <mat-icon>add</mat-icon>
-    Adicionar Nova
+    Adicionar Novo
   </button>
 </div>
 <div class="table-wrapper">
@@ -26,12 +26,15 @@
               class="delete-button"
               mat-icon-button
               color="warn"
-              (click)="deleteCategory(element.id)"
-              matTooltip="Excluir categoria"
+              (click)="deleteDevice(element.id)"
+              matTooltip="Excluir dispositivo"
             >
               <mat-icon>delete</mat-icon>
             </button>
           </div>
+          <span *ngSwitchCase="'select'" class="cell-content">
+            {{ element[col.key]["name"] }}
+          </span>
           <span
             *ngSwitchDefault
             class="cell-content"
@@ -56,7 +59,7 @@
               mat-icon-button
               color="primary"
               class="save-button"
-              (click)="insertCategory(element)"
+              (click)="insertDevice(element)"
               [disabled]="isFormInvalid(element)"
               matTooltip="Salvar alterações"
               matTooltipPosition="above"
@@ -64,6 +67,32 @@
               <mat-icon>check</mat-icon>
             </button>
           </div>
+          <mat-form-field *ngSwitchCase="'select'" class="edit-field">
+            <mat-select
+              [(ngModel)]="element[col.key]"
+              #fieldModel="ngModel"
+              [required]="col['required']!"
+              [name]="col.key"
+              placeholder="Selecione uma categoria"
+            >
+              <mat-option value="">Nenhuma categoria selecionada</mat-option>
+              <mat-option
+                *ngFor="let category of categories"
+                [value]="category"
+              >
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                fieldModel.invalid && (fieldModel.dirty || fieldModel.touched)
+              "
+            >
+              <span *ngIf="fieldModel.errors?.['required']">
+                Campo obrigatório
+              </span>
+            </mat-error>
+          </mat-form-field>
           <mat-form-field *ngSwitchDefault class="edit-field">
             <input
               matInput
@@ -71,10 +100,10 @@
               #fieldModel="ngModel"
               [required]="col['required']!"
               [type]="col.type"
-              [readonly]="col.key !== 'name'"
+              [readonly]="col.key === 'id'"
               [hidden]="col.key === 'id'"
               [disabled]="col.key === 'id'"
-              [maxlength]="col.key === 'name' ? 128 : null"
+              (keydown)="validateInput($event, col.key)"
             />
             <mat-error
               *ngIf="

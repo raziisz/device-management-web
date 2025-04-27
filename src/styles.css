@@ -59,6 +59,20 @@ a:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+.mat-mdc-snack-bar-container.success-toast {
+  --mdc-snackbar-container-color: #4caf50 !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+  border-radius: 8px !important;
+  margin-top: 70px !important;
+}
+
+.mat-mdc-snack-bar-container.error-toast {
+  --mdc-snackbar-container-color: #f44336 !important;
+  --mat-mdc-snack-bar-button-color: white !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+}
+
 /* Variáveis CSS para reuso */
 :root {
   --primary-color: #4caf50;
