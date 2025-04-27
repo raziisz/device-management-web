@@ -1,0 +1,14 @@
+version: "3"
+services:
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    networks:
+      - angular-net
+
+networks:
+  angular-net:
+    driver: bridge
