@@ -1,9 +1,14 @@
 <div class="home-container">
-  <h1 class="welcome-title">Bem-vindo ao {{ appName }}</h1>
-  <div class="content">
-    <p>Gerencie seus dispositivos de forma eficiente e organizada</p>
-    <button mat-raised-button color="primary" routerLink="/categories">
-      Gerenciar Categorias
-    </button>
+  <div class="hero-section">
+    <h1 class="welcome-title">Bem-vindo ao {{ appName }}</h1>
+    <div class="content">
+      <p class="description">
+        Gerencie seus dispositivos de forma eficiente e organizada
+      </p>
+      <button mat-raised-button class="cta-button" routerLink="/categories">
+        <mat-icon>category</mat-icon>
+        Gerenciar Categorias
+      </button>
+    </div>
   </div>
 </div>

@@ -1,26 +1,77 @@
-/* src/app/components/home/home.component.css */
+/* home.component.css */
 .home-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
+  background-color: #1a1a1a;
+  min-height: calc(100vh - 64px);
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-section {
+  max-width: 1200px;
   text-align: center;
+  padding: 2rem;
+  background: #2d2d2d;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .welcome-title {
-  font-size: 2.5rem;
-  color: #3f51b5;
+  font-size: 2.8rem;
+  color: #4caf50;
   margin-bottom: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
-.content {
-  background: #f5f5f5;
-  padding: 2rem;
+.description {
+  font-size: 1.3rem;
+  color: #e0e0e0;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.cta-button {
+  background-color: #4caf50 !important;
+  color: #fff !important;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
-p {
-  font-size: 1.2rem;
-  color: #616161;
-  margin-bottom: 2rem;
+.cta-button:hover {
+  background-color: #45a049 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.cta-button mat-icon {
+  font-size: 1.4rem;
+  width: 24px;
+  height: 24px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .welcome-title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1.1rem;
+  }
+
+  .cta-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
 }
