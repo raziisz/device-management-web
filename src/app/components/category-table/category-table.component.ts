@@ -25,12 +25,14 @@ import { ToastService } from '../../services/toast.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-category-table',
   standalone: true,
   imports: [
     CommonModule,
+    MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
@@ -92,9 +94,13 @@ export class CategoryTableComponent implements OnInit {
           this.loadCategories(this.meta.currentPage);
         },
         error: (err) => {
-          console.error('Erro ao adicionar categoria:', err);
-          this.toastService.showError('Erro ao adicionar categoria');
+          const { error } = err;
           this.isLoading = false;
+          if (error) {
+            this.toastService.showError(error.message);
+            return;
+          }
+          this.toastService.showError('Erro ao adicionar categoria');
         },
       });
     }
@@ -140,9 +146,15 @@ export class CategoryTableComponent implements OnInit {
               this.loadCategories(this.meta.currentPage);
             },
             error: (err) => {
-              console.error('Erro ao excluir categoria:', err);
-              this.toastService.showError('Erro ao excluir categoria');
               this.isLoading = false;
+              console.error('Erro ao excluir categoria:', err);
+              const { error } = err;
+              this.isLoading = false;
+              if (error) {
+                this.toastService.showError(error.message);
+                return;
+              }
+              this.toastService.showError('Erro ao excluir categoria');
             },
           });
         }
