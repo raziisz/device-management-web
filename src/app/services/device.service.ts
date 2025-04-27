@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Device } from '../models/device.model';
 import { Observable } from 'rxjs';
 import { PaginatedResponse } from '../models/pagination.model';
-
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceService {
-  private apiUrl = 'http://localhost:3000/devices'; // Substitua pela URL da sua API
+  private apiUrl = `${environment.apiUrl}/devices`;
 
   constructor(private http: HttpClient) {}
 
