@@ -1,59 +1,63 @@
-# DeviceManagementWeb
+# Device-Management-Web
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+Sistema de gerenciamento de dispositivos, sugerido como teste técnico para Pessoa Desenvolvedora Fullstack.
 
-## Development server
+# 🗃 Baixando o repositório
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Para baixar e executar o sistema, faça download com os seguintes comandos:
 
 ```bash
-ng generate component component-name
+    git clone -b main https://github.com/raziisz/device-management-web.git
+    cd device-management-web
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 💻 Tecnologias
+
+- Angular (v19+)
+- Node.js (v22.15.0)
+- Angular Material
+
+## ⚙ Configuração
+
+Para conseguir rodar o Front-end, você precisa ter instalado o Node.js e Angular 19.x.
+Após isso, clone o repositório e entre na pasta e execute o seguinte comando para instalar as dependências do projeto:
 
 ```bash
-ng generate --help
+$ npm install
 ```
 
-## Building
+- Obs: Vale lembrar que o Backend precisa está configurado e ligado para a aplicação funcionar
+  \*Vide link para baixar e configurar o mesmo: https://github.com/raziisz/device-management-api
 
-To build the project run:
+## 🚀 Executando (Sem o Docker)
+
+Após a instalação das dependências, execute o seguinte comando:
 
 ```bash
-ng build
+$ npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🚀 Executando (Com o Docker)
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Caso não queira ter problemas com ambiente, rode os seguintes comando docker:
 
 ```bash
-ng test
+$ docker-compose build
+$ docker-compose up -d
 ```
 
-## Running end-to-end tests
+Depois é só acessar em sua máquina o seguinte endereço: `http://localhost:4200/`
 
-For end-to-end (e2e) testing, run:
+### 👨‍💻 Autor
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+<a href="http://raziisz.github.io/">
+ <img style="border-radius: 50%;" src="https://avatars2.githubusercontent.com/u/42245201?s=460&u=ce3bae80de213ad246855873906246051fba4458&v=4" width="100px;" alt=""/>
+ <br />
+ <sub><b>Luiz Felipe</b></sub></a> <a href="http://raziisz.github.io/" title="Dev">🚀</a>
 
-## Additional Resources
+Feito com ❤️ por Luiz Felipe 👋🏽 Entre em contato!
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+[![Linkedin Badge](https://img.shields.io/badge/-Felipe-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/felipelibert30/)](https://www.linkedin.com/in/felipelibert30/)
+[![Outlook Badge](https://img.shields.io/badge/-raziel_libertino@hotmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:raziel_libertino@hotmail.com)](mailto:raziel_libertino@hotmail.com)
