@@ -51,7 +51,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class CategoryTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  valid: any = {};
   displayedColumns: string[] = CategoryColumns.map((col) => col.key);
   dataSource = new MatTableDataSource<Category>();
   columnsSchema: ColumnSchema[] = CategoryColumns;
@@ -79,10 +78,14 @@ export class CategoryTableComponent implements OnInit {
       createdAt: Intl.DateTimeFormat('pt-BR').format(new Date()),
       isEdit: true,
     };
-    this.valid[newRow.id] = {
-      name: false,
-    };
+
     this.dataSource.data = [newRow, ...this.dataSource.data];
+  }
+
+  removeRow(category: Category) {
+    this.dataSource.data = this.dataSource.data.filter(
+      (row) => row.id !== category.id
+    );
   }
 
   insertCategory(row: Category): void {
@@ -126,7 +129,7 @@ export class CategoryTableComponent implements OnInit {
       error: (error) => {
         this.isLoading = false;
         this.toastService.showError(
-          'Ocorreu um problema ao carregar categorias, tenta novamente mais tarde.'
+          'Ocorreu um problema ao carregar categorias, tente novamente mais tarde.'
         );
         console.error('Erro ao carregar categorias:', error);
       },

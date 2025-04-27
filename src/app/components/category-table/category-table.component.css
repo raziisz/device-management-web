@@ -52,6 +52,14 @@ table {
   border-bottom: 1px solid #444444;
 }
 
+.cell-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-width: 200px;
+}
+
 .data-row:hover {
   background-color: rgba(255, 255, 255, 0.05) !important;
 }

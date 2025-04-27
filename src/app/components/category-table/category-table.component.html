@@ -2,7 +2,7 @@
   <mat-spinner diameter="50"></mat-spinner>
 </div>
 <div class="header-section">
-  <h2 class="section-title">Gerenciamento de Categorias</h2>
+  <h2 class="section-title">Categorias</h2>
   <button
     class="primary-button"
     mat-raised-button
@@ -32,13 +32,26 @@
               <mat-icon>delete</mat-icon>
             </button>
           </div>
-          <span *ngSwitchDefault class="cell-content">
+          <span
+            *ngSwitchDefault
+            class="cell-content"
+            [matTooltip]="element[col.key]"
+          >
             {{ element[col.key] }}
           </span>
         </div>
 
         <div [ngSwitch]="col.type" *ngIf="element.isEdit">
           <div class="action-buttons" *ngSwitchCase="'isEdit'">
+            <button
+              class="delete-button"
+              mat-icon-button
+              color="warn"
+              (click)="removeRow(element)"
+              matTooltip="Remover linha"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
             <button
               mat-icon-button
               color="primary"
@@ -61,6 +74,7 @@
               [readonly]="col.key !== 'name'"
               [hidden]="col.key === 'id'"
               [disabled]="col.key === 'id'"
+              [maxlength]="col.key === 'name' ? 128 : null"
             />
             <mat-error
               *ngIf="
