@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { DeviceTableComponent } from '../../components/device-table/device-table.component';
 
 @Component({
   selector: 'app-device',
-  imports: [],
+  imports: [DeviceTableComponent],
   templateUrl: './device.component.html',
-  styleUrl: './device.component.css'
+  styleUrl: './device.component.css',
 })
-export class DeviceComponent {
-
-}
+export class DeviceComponent {}
