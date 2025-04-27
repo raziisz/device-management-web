@@ -25,6 +25,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastService } from '../../services/toast.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { CategoryService } from '../../services/category.service';
+import { debounceTime, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-device-table',
@@ -111,49 +112,63 @@ export class DeviceTableComponent implements OnInit {
   insertDevice(row: Device): void {
     if (row.id) {
       this.isLoading = true;
-      this.deviceService.addDevice(row).subscribe({
-        next: () => {
-          this.toastService.showSuccess('Dispositivo adicionado com sucesso!');
-          this.loadDevices(this.meta.currentPage);
-        },
-        error: (err) => {
-          const { error } = err;
-          this.isLoading = false;
-          if (error) {
-            this.toastService.showError(error.message);
-            return;
-          }
-          this.toastService.showError('Erro ao adicionar dispositivo');
-        },
-      });
+      this.deviceService
+        .addDevice(row)
+        .pipe(
+          debounceTime(500),
+          finalize(() => (this.isLoading = false))
+        )
+        .subscribe({
+          next: () => {
+            this.toastService.showSuccess(
+              'Dispositivo adicionado com sucesso!'
+            );
+            this.loadDevices(this.meta.currentPage);
+          },
+          error: (err) => {
+            const { error } = err;
+            this.isLoading = false;
+            if (error) {
+              this.toastService.showError(error.message);
+              return;
+            }
+            this.toastService.showError('Erro ao adicionar dispositivo');
+          },
+        });
     }
   }
 
   loadDevices(page: number = 1): void {
     this.isLoading = true;
-    this.deviceService.getDevices(page, this.meta.perPage).subscribe({
-      next: (response) => {
-        this.dataSource.data = response.data.map((device) => ({
-          ...device,
-          isEdit: false,
-        }));
-        this.meta = response.meta;
-        this.isLoading = false;
-        if (
-          this.meta.currentPage > this.meta.lastPage &&
-          this.meta.lastPage > 0
-        ) {
-          this.loadDevices();
-        }
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.toastService.showError(
-          'Ocorreu um problema ao carregar dispositivos, tente novamente mais tarde.'
-        );
-        console.error('Erro ao carregar dispositivos:', error);
-      },
-    });
+    this.deviceService
+      .getDevices(page, this.meta.perPage)
+      .pipe(
+        debounceTime(500),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe({
+        next: (response) => {
+          this.dataSource.data = response.data.map((device) => ({
+            ...device,
+            isEdit: false,
+          }));
+          this.meta = response.meta;
+          this.isLoading = false;
+          if (
+            this.meta.currentPage > this.meta.lastPage &&
+            this.meta.lastPage > 0
+          ) {
+            this.loadDevices();
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.toastService.showError(
+            'Ocorreu um problema ao carregar dispositivos, tente novamente mais tarde.'
+          );
+          console.error('Erro ao carregar dispositivos:', error);
+        },
+      });
   }
 
   deleteDevice(id: number): void {
@@ -163,25 +178,31 @@ export class DeviceTableComponent implements OnInit {
       .subscribe((confirm) => {
         if (confirm) {
           this.isLoading = true;
-          this.deviceService.deleteDevice(id).subscribe({
-            next: () => {
-              this.toastService.showSuccess(
-                'Dispositivo excluído com sucesso!'
-              );
-              this.loadDevices(this.meta.currentPage);
-            },
-            error: (err) => {
-              this.isLoading = false;
-              console.error('Erro ao excluir dispositivo:', err);
-              const { error } = err;
-              this.isLoading = false;
-              if (error) {
-                this.toastService.showError(error.message);
-                return;
-              }
-              this.toastService.showError('Erro ao excluir dispositivo');
-            },
-          });
+          this.deviceService
+            .deleteDevice(id)
+            .pipe(
+              debounceTime(500),
+              finalize(() => (this.isLoading = false))
+            )
+            .subscribe({
+              next: () => {
+                this.toastService.showSuccess(
+                  'Dispositivo excluído com sucesso!'
+                );
+                this.loadDevices(this.meta.currentPage);
+              },
+              error: (err) => {
+                this.isLoading = false;
+                console.error('Erro ao excluir dispositivo:', err);
+                const { error } = err;
+                this.isLoading = false;
+                if (error) {
+                  this.toastService.showError(error.message);
+                  return;
+                }
+                this.toastService.showError('Erro ao excluir dispositivo');
+              },
+            });
         }
       });
   }

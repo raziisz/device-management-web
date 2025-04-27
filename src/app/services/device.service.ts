@@ -25,7 +25,7 @@ export class DeviceService {
 
   addDevice(device: Device): Observable<Device> {
     return this.http.post<Device>(this.apiUrl, {
-      partNumber: Number(device.partNumber),
+      partNumber: device.partNumber,
       color: device.color,
       categoryId: device.category?.id,
     });
