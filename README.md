@@ -2,6 +2,8 @@
 
 Sistema de gerenciamento de dispositivos, sugerido como teste técnico para Pessoa Desenvolvedora Fullstack.
 
+Acesse a aplicação que esta rodando em produção: [Device-Management](http://ec2-15-228-244-121.sa-east-1.compute.amazonaws.com/home)
+
 # 🗃 Baixando o repositório
 
 Para baixar e executar o sistema, faça download com os seguintes comandos:
