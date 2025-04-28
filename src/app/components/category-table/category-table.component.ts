@@ -122,7 +122,10 @@ export class CategoryTableComponent implements OnInit {
         }));
         this.meta = response.meta;
         this.isLoading = false;
-        if (this.meta.currentPage > this.meta.lastPage) {
+        if (
+          this.meta.currentPage > this.meta.lastPage &&
+          this.meta.lastPage > 0
+        ) {
           this.loadCategories();
         }
       },
