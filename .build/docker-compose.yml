@@ -1,0 +1,13 @@
+services:
+  angular-app:
+    build:
+      context: ..
+      dockerfile: .build/Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - angular-net
+
+networks:
+  angular-net:
+    driver: bridge
