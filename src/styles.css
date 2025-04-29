@@ -1,3 +1,11 @@
+:root {
+  --primary-color: #4caf50;
+  --accent-color: #45a049;
+  --dark-bg: #1a1a1a;
+  --content-bg: #2d2d2d;
+  --text-primary: #e0e0e0;
+  --text-secondary: #9e9e9e;
+}
 html,
 body {
   height: 100%;
@@ -73,12 +81,22 @@ a:hover {
   --mdc-snackbar-supporting-text-color: white !important;
 }
 
-/* Variáveis CSS para reuso */
-:root {
-  --primary-color: #4caf50;
-  --accent-color: #45a049;
-  --dark-bg: #1a1a1a;
-  --content-bg: #2d2d2d;
-  --text-primary: #e0e0e0;
-  --text-secondary: #9e9e9e;
+.container {
+  padding: 0 1rem;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --primary-font-size: 14px;
+    --content-padding: 0.5rem;
+  }
+  body {
+    font-size: var(--primary-font-size);
+    padding: var(--content-padding);
+  }
 }
