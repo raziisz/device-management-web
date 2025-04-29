@@ -1,16 +1,36 @@
 <nav class="dark-nav">
   <div class="nav-content">
     <span class="logo">Gerenciamento de Dispositivos</span>
-    <div class="nav-links">
-      <a mat-button routerLink="/home" routerLinkActive="active-link">Home</a>
-      <a mat-button routerLink="/categories" routerLinkActive="active-link"
+    <div class="nav-links" [class.open]="menuOpen">
+      <a
+        mat-button
+        routerLink="/home"
+        routerLinkActive="active-link"
+        (click)="onLinkClick()"
+        >Home</a
+      >
+      <a
+        mat-button
+        routerLink="/categories"
+        routerLinkActive="active-link"
+        (click)="onLinkClick()"
         >Categorias</a
       >
-      <a mat-button routerLink="/devices" routerLinkActive="active-link"
+      <a
+        mat-button
+        routerLink="/devices"
+        routerLinkActive="active-link"
+        (click)="onLinkClick()"
         >Dispositivos</a
       >
     </div>
+
+    <div class="burger" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
 </nav>
-
+<div class="backdrop" *ngIf="menuOpen" (click)="toggleMenu()"></div>
 <router-outlet></router-outlet>

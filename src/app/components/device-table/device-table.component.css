@@ -158,3 +158,18 @@ table {
   align-items: center;
   z-index: 1000;
 }
+
+@media (max-width: 600px) {
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .cell-content {
+    max-width: 100px;
+    white-space: normal;
+  }
+  .table-wrapper {
+    overflow-x: auto;
+  }
+}
